@@ -4,8 +4,10 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
-	widget2 "fynebind/pkg/widget"
+	"myfriends/internal/app/model"
+	"strconv"
 )
 
 type FriendListItem struct {
@@ -17,10 +19,9 @@ type FriendListItem struct {
 
 	boundData                binding.ExternalUntyped
 	boundDataChangedListener binding.DataListener
-	bindTextFn               widget2.DoubleLabelBindTextFn
 }
 
-func NewFriendListItem(boundData binding.ExternalUntyped) *FriendListItem {
+func NewFriendListItem() *FriendListItem {
 	item := &FriendListItem{
 		firstName:  widget.NewLabel(""),
 		familyName: widget.NewLabel(""),
@@ -28,13 +29,16 @@ func NewFriendListItem(boundData binding.ExternalUntyped) *FriendListItem {
 	}
 
 	boundDataChangedListener := binding.NewDataListener(func() {
+		value, _ := item.boundData.Get()
+		friend := value.(model.Friend)
 
-		item.text1.Text, item.text2.Text = item.bindTextFn(item.boundData)
+		item.firstName.Text = friend.FirstName
+		item.familyName.Text = friend.FamilyName
+		item.age.Text = "(" + strconv.Itoa(friend.Age) + ")"
+
 		item.Refresh()
 	})
 	item.boundDataChangedListener = boundDataChangedListener
-
-	item.Bind(boundData)
 
 	item.ExtendBaseWidget(item)
 
@@ -49,13 +53,11 @@ func (item *FriendListItem) Bind(data binding.ExternalUntyped) {
 	item.boundData = data
 
 	if item.boundData != nil {
-		value, err := item.boundData.Get()
-		if err != nil || value.(Friend)
 		item.boundData.AddListener(item.boundDataChangedListener)
 	}
 }
 
 func (item *FriendListItem) CreateRenderer() fyne.WidgetRenderer {
-	c := container.NewHBox(item.firstName, item.familyName, item.age)
+	c := container.NewHBox(item.firstName, item.familyName, layout.NewSpacer(), item.age)
 	return widget.NewSimpleRenderer(c)
 }

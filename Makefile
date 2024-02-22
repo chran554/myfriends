@@ -1,7 +1,10 @@
 
 .PHONY: all
-all: generate
-	go build -o bin/thisisfyne ./cmd/thisisfyne
+all: generate build
+
+.PHONY: build
+build:
+	go build -o bin/myfriends ./cmd/myfriends
 
 .PHONY: generate
 generate:
@@ -9,8 +12,8 @@ generate:
 
 .PHONY: macos-app
 macos-app: all
-	fyne package --executable bin/thisisfyne --name "Selfie evaluator" --appVersion 0.1.0 --icon assets/macos_icon.png
-	mv "Selfie evaluator.app" bin/
+	fyne package --executable bin/myfriends --name "My Friends" --appVersion 0.1.0 --icon assets/macos_icon.png
+	mv "My Friends.app" bin/
 
 .PHONY: clean
 clean:
