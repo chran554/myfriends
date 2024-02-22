@@ -1,5 +1,7 @@
 = MyFriends - Fyne bind external test application
 
+image::documentation/images/myfriends.png[alt="My Friends application"]
+
 This is an example application to test the "external bind" functionality of the Golang UI library Fyne.
 If you would like to see examples of bound external data then I hope this example application can be of use.
 
